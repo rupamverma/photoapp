@@ -4,6 +4,7 @@ import com.codeflow.security.config.JwtService;
 import com.codeflow.security.dto.AuthenticationRequest;
 import com.codeflow.security.dto.AuthenticationResponse;
 import com.codeflow.security.dto.RegisterRequest;
+import com.codeflow.security.dto.UserDTO;
 import com.codeflow.security.entity.User;
 import com.codeflow.security.enumuration.Role;
 import com.codeflow.security.repository.UserRepository;
@@ -37,7 +38,13 @@ public class AuthenticationService {
       return AuthenticationResponse
               .builder()
               .token(jwtToken)
-              .build();
+                      .results(UserDTO.builder()
+                              .userId(user.getId())
+                              .firstName(user.getFirstName())
+                              .lastName(user.getLastName())
+                              .email(user.getEmail())
+                              .build())
+                      .build();
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest registeredRequest) {
@@ -52,6 +59,12 @@ public class AuthenticationService {
         return AuthenticationResponse
                 .builder()
                 .token(jwtToken)
+                .results(UserDTO.builder()
+                        .email(user.getUsername())
+                        .userId(user.getId())
+                        .firstName(user.getFirstName())
+                        .lastName(user.getLastName())
+                        .build())
                 .build();
     }
 }
